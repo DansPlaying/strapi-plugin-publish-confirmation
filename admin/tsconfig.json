@@ -8,12 +8,10 @@
     "strict": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "declaration": true,
-    "declarationDir": "../dist/admin/src",
-    "emitDeclarationOnly": true,
     "incremental": true,
     "composite": true,
-    "tsBuildInfoFile": ".tsbuildinfo"
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "noEmit": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]
