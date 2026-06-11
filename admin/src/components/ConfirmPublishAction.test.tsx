@@ -31,11 +31,13 @@ const DEFAULT_PROPS = {
 
 const draftDoc = { status: 'draft', publishedAt: null };
 const publishedDoc = { status: 'published', publishedAt: '2024-01-01T00:00:00.000Z' };
+const formValues = { title: 'Test Post' };
 
 beforeEach(() => {
   vi.mocked(unstable_useDocumentActions).mockReturnValue({ publish: mockPublish } as any);
   vi.mocked(unstable_useDocument).mockReturnValue({ document: draftDoc } as any);
-  vi.mocked(useForm).mockImplementation((_name, selector) => selector({ modified: false, isSubmitting: false } as any)
+  vi.mocked(useForm).mockImplementation((_name, selector) =>
+    selector({ modified: false, isSubmitting: false, values: formValues } as any)
   );
   mockPublish.mockReset();
 });
@@ -131,7 +133,7 @@ describe('ConfirmPublishAction — onConfirm', () => {
         model: DEFAULT_PROPS.model,
         documentId: DEFAULT_PROPS.documentId,
       },
-      draftDoc
+      formValues
     );
   });
 });

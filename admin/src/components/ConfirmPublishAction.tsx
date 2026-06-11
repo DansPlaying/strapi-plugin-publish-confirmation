@@ -25,13 +25,14 @@ const ConfirmPublishAction = ({
 
   const modified = useForm('ConfirmPublishAction', ({ modified }) => modified);
   const isSubmitting = useForm('ConfirmPublishAction', ({ isSubmitting }) => isSubmitting);
+  const formValues = useForm('ConfirmPublishAction', ({ values }) => values);
 
   const isDocumentPublished =
     (document?.status as string) === 'published' ||
     (document?.publishedAt as string | null) !== null;
 
   const performPublish = async () => {
-    await publish({ collectionType, model, documentId }, document ?? {});
+    await publish({ collectionType, model, documentId }, formValues ?? {});
   };
 
   return {
