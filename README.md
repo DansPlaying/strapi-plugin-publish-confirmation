@@ -61,6 +61,10 @@ bun run build && bun run develop
 
 No further configuration needed.
 
+## Reporting issues
+
+Found a bug or have a feature request? Open an issue on [GitHub](https://github.com/DansPlaying/strapi-plugin-publish-confirmation/issues).
+
 ## License
 
 MIT
