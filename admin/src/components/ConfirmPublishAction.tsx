@@ -31,7 +31,7 @@ const ConfirmPublishAction = ({
     (document?.publishedAt as string | null) !== null;
 
   const performPublish = async () => {
-    await publish({ collectionType, model, documentId });
+    await publish({ collectionType, model, documentId }, document ?? {});
   };
 
   return {

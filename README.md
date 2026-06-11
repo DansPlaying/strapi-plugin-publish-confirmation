@@ -1,13 +1,22 @@
 # strapi-plugin-publish-confirmation
 
-A Strapi v5 plugin that adds a confirmation dialog before publishing content, preventing accidental publishes in the Content Manager.
+Adds a confirmation step to the **Publish** button in Strapi v5's Content Manager. Instead of publishing immediately, editors see a dialog asking them to confirm — making accidental publishes impossible.
 
-## Features
+## What it does
 
-- Intercepts the **Publish** button in the edit view, panel, preview, and relation modal
-- Shows a native Strapi confirmation dialog before any publish action
-- Zero configuration — works out of the box
-- Uses Strapi's built-in document action API (upgrade-safe)
+When an editor clicks **Publish**, a dialog appears:
+
+> **Publish content**
+> Are you sure you want to publish these changes? This will make the content publicly available.
+>
+> [ Cancel ]  [ Confirm ]
+
+Cancelling does nothing. Confirming publishes the document normally. The button is smart — it stays disabled when there is nothing new to publish (document already published with no pending changes).
+
+The confirmation dialog appears everywhere the Publish button can be clicked:
+- The document edit view
+- The preview panel
+- Relation modals
 
 ## Requirements
 
@@ -17,12 +26,17 @@ A Strapi v5 plugin that adds a confirmation dialog before publishing content, pr
 ## Installation
 
 ```bash
-npm install strapi-plugin-publish-confirmation
+# pnpm
+pnpm add strapi-plugin-publish-confirmation
+
+# yarn
+yarn add strapi-plugin-publish-confirmation
+
+# bun
+bun add strapi-plugin-publish-confirmation
 ```
 
-## Configuration
-
-Enable the plugin in `config/plugins.ts`:
+Enable the plugin in `config/plugins.ts` (or `config/plugins.js`):
 
 ```ts
 export default () => ({
@@ -32,42 +46,20 @@ export default () => ({
 });
 ```
 
-Then rebuild the admin panel:
+Rebuild and restart:
 
 ```bash
-npm run build
-npm run develop
+# pnpm
+pnpm build && pnpm develop
+
+# yarn
+yarn build && yarn develop
+
+# bun
+bun run build && bun run develop
 ```
 
-## How it works
-
-The plugin replaces Strapi's built-in `PublishAction` with a wrapped version that always returns a `dialog` descriptor. Strapi's document action API natively supports dialogs — when an action returns `dialog: { type: 'dialog', ... }`, clicking the button opens a confirm/cancel dialog before the action fires.
-
-No custom modal component is needed; the confirmation UI is rendered by Strapi itself.
-
-## Development
-
-```bash
-# Install dependencies
-npm install
-
-# Build the plugin
-npm run build
-
-# Watch mode (for use with watch:link)
-npm run watch
-```
-
-## Publishing to npm
-
-Create a git tag to trigger the GitHub Actions workflow:
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-```
-
-Add your `NPM_TOKEN` as a GitHub Actions secret before pushing the tag.
+No further configuration needed.
 
 ## License
 
