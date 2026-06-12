@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useIntl } from 'react-intl';
 import {
   unstable_useDocument as useDocument,
@@ -22,9 +23,9 @@ const ConfirmPublishAction = ({
   const { formatMessage } = useIntl();
   const { publish } = useDocumentActions();
   const { document } = useDocument({ documentId, collectionType, model }, { skip: !documentId });
+  const [isPublishing, setIsPublishing] = useState(false);
 
   const modified = useForm('ConfirmPublishAction', ({ modified }) => modified);
-  const isSubmitting = useForm('ConfirmPublishAction', ({ isSubmitting }) => isSubmitting);
   const formValues = useForm('ConfirmPublishAction', ({ values }) => values);
 
   const isDocumentPublished =
@@ -32,12 +33,16 @@ const ConfirmPublishAction = ({
     (document?.publishedAt as string | null) !== null;
 
   const performPublish = async () => {
-    await publish({ collectionType, model, documentId }, formValues ?? {});
+    setIsPublishing(true);
+    try {
+      await publish({ collectionType, model, documentId }, formValues ?? {});
+    } finally {
+      setIsPublishing(false);
+    }
   };
 
   return {
     disabled:
-      isSubmitting ||
       activeTab === 'published' ||
       (!modified && isDocumentPublished) ||
       (!modified && !documentId),
@@ -52,8 +57,9 @@ const ConfirmPublishAction = ({
         id: 'publish-confirmation.dialog.message',
         defaultMessage: 'Are you sure you want to publish these changes? This will make the content publicly available.',
       }),
+      loading: isPublishing,
       onConfirm: performPublish,
-    },
+    } as any,
   };
 };
 
