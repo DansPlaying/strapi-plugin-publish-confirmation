@@ -90,6 +90,25 @@ describe('ConfirmPublishAction — content types without Draft & Publish', () =>
     expect(result.current).toBeNull();
   });
 
+  it('keeps the hook order stable when the schema loads after the first render', () => {
+    mockDocument(draftDoc, undefined);
+    const { result, rerender } = renderHook(() => ConfirmPublishAction(DEFAULT_PROPS));
+    expect(result.current).toBeNull();
+
+    mockDocument(draftDoc, draftAndPublishSchema);
+    expect(() => rerender()).not.toThrow();
+    expect(result.current).not.toBeNull();
+  });
+
+  it('hides the action again if the schema turns out not to have Draft & Publish', () => {
+    const { result, rerender } = renderHook(() => ConfirmPublishAction(DEFAULT_PROPS));
+    expect(result.current).not.toBeNull();
+
+    mockDocument(draftDoc, { options: { draftAndPublish: false } });
+    expect(() => rerender()).not.toThrow();
+    expect(result.current).toBeNull();
+  });
+
   it('still returns the action when draftAndPublish is enabled', () => {
     const result = renderRaw(DEFAULT_PROPS);
     expect(result.current).not.toBeNull();
