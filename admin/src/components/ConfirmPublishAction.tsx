@@ -26,6 +26,7 @@ const ConfirmPublishAction = ({
   const [isPublishing, setIsPublishing] = useState(false);
 
   const modified = useForm('ConfirmPublishAction', ({ modified }) => modified);
+  const isSubmitting = useForm('ConfirmPublishAction', ({ isSubmitting }) => isSubmitting);
   const formValues = useForm('ConfirmPublishAction', ({ values }) => values);
 
   const isDocumentPublished =
@@ -50,6 +51,7 @@ const ConfirmPublishAction = ({
 
   return {
     disabled:
+      isSubmitting ||
       activeTab === 'published' ||
       (!modified && isDocumentPublished) ||
       (!modified && !documentId),
