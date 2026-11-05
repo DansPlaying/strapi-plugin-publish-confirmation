@@ -22,7 +22,7 @@ const ConfirmPublishAction = ({
 }: DocumentActionProps) => {
   const { formatMessage } = useIntl();
   const { publish } = useDocumentActions();
-  const { document } = useDocument({ documentId, collectionType, model }, { skip: !documentId });
+  const { document, schema } = useDocument({ documentId, collectionType, model }, { skip: !documentId });
   const [isPublishing, setIsPublishing] = useState(false);
 
   const modified = useForm('ConfirmPublishAction', ({ modified }) => modified);
@@ -40,6 +40,13 @@ const ConfirmPublishAction = ({
       setIsPublishing(false);
     }
   };
+
+  // Like the built-in action: a content type without Draft & Publish has no
+  // `publish()` on the server, so offering the button only ends in a 500.
+  // Keep this after every hook above so their order stays stable.
+  if (!schema?.options?.draftAndPublish) {
+    return null;
+  }
 
   return {
     disabled:
